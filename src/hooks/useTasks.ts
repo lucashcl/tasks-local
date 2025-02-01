@@ -7,7 +7,7 @@ type Days = [boolean, boolean, boolean, boolean, boolean, boolean, boolean]
 
 export type Task = {
    id: string
-   name: string
+   title: string
    description?: string
    tags: string[]
    days: Days
@@ -15,22 +15,28 @@ export type Task = {
 }
 
 type CreateTask = {
-   name: string
+   title: string
    description?: string
    tags?: string[]
    days?: Days
 }
 
+export const checkCompleted = (completedAt: Date | null) => {
+   if (!completedAt) return false
+   return isSameDay(new Date(), completedAt)
+}
+
 export function useTasks() {
    const [tasks, setTasks] = useLocalStorage<Task[]>({ key: "tasks", initialValue: [] })
-   const checkCompleted = (completedAt: Date | null) => {
-      if (!completedAt) return false
-      return isSameDay(new Date(), completedAt)
-   }
-   const completedTasks = tasks.filter(task => checkCompleted(task.completedAt))
+   const currentDate = new Date()
+   const currentDayTasks = tasks.filter(task =>
+      task.days.every(day => !day) ||
+      task.days[currentDate.getDay()]
+   )
+   const completedTasks = currentDayTasks.filter(task => checkCompleted(task.completedAt))
    useEffect(() => {
-      window.document.title = tasks.length ? `Tasks (${completedTasks.length}/${tasks.length})` : "Tasks"
-   }, [tasks, completedTasks])
+      window.document.title = currentDayTasks.length ? `Tasks (${completedTasks.length}/${currentDayTasks.length})` : "Tasks"
+   }, [currentDayTasks, completedTasks])
    const addTask = (task: CreateTask) => {
       setTasks(prev => [...prev, {
          id: window.crypto.randomUUID(),
@@ -46,6 +52,12 @@ export function useTasks() {
    }
 
    const completeTask = (id: string) => {
+      const task = tasks.find(task => task.id === id)
+      if (!task) return
+      if (task.days.every(day => !day)) {
+         removeTask(id)
+         return
+      }
       setTasks(prev => prev.map(task => {
          if (task.id === id) {
             return {
@@ -69,15 +81,27 @@ export function useTasks() {
       }))
    }
 
+   const updateTask = (id: string, task: Partial<Task>) => {
+      setTasks(prev => prev.map(t => {
+         if (t.id === id) {
+            return {
+               ...t,
+               ...task
+            }
+         }
+         return t
+      }))
+   }
+
    return {
-      tasks,
-      getCurrentDayTasks: (day: Date) => tasks.filter(task => task.days.every(day => !day) || task.days[day.getDay()]),
+      allTasks: tasks,
+      currentDayTasks,
       tags: unique(tasks.flatMap(task => task.tags)),
-      progress: tasks.length ? completedTasks.length / tasks.length : 0,
-      checkCompleted,
+      progress: tasks.length ? completedTasks.length / currentDayTasks.length : 0,
       addTask,
-      removeTask,
+      updateTask,
       completeTask,
-      uncompleteTask
+      uncompleteTask,
+      removeTask
    }
 }

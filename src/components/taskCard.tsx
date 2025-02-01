@@ -1,24 +1,30 @@
+import { capitalize } from "radash";
 import { cn } from "../lib/utils";
 import { Card, CardContent } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
+import { Badge } from "./ui/badge";
+import { checkCompleted, type Task } from "../hooks/useTasks";
 
 type Props = {
    className?: string
-   title: string
-   description?: string
-   isCompleted: boolean
    onToggle: () => void
-}
+} & Task
 
-export default function TaskCard({ className, title, description, isCompleted, onToggle }: Props) {
+export default function TaskCard({ className, title, description, tags, completedAt, onToggle }: Props) {
+   const isCompleted = checkCompleted(completedAt)
    return (
-      <Card className={cn("p-4 w-full", className)}>
+      <Card className={isCompleted ? cn("px-4 py-2 w-full", className) : cn("p-4 w-full", className)}>
          <CardContent className="flex justify-between items-center p-0">
             <div>
-               <h3 className="font-semibold text-lg">{title}</h3>
-               <p className="text-muted-foreground">
-                  {description}
-               </p>
+               <h3 className={isCompleted ? "font-semibold text-lg text-muted-foreground" : "font-semibold text-lg"}>{capitalize(title)}</h3>
+               {!isCompleted &&
+                  <>
+                     <p className="text-muted-foreground">{description}</p>
+                     <div className="space-x-2">
+                        {tags.map(tag => <Badge variant="secondary" key={tag}>{tag}</Badge>)}
+                     </div>
+                  </>
+               }
             </div>
             <Checkbox
                className="rounded-full size-8"
