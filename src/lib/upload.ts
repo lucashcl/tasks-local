@@ -1,4 +1,4 @@
-import type { Task } from "../types/task"
+import type { Task } from "./task"
 
 export const handleUpload = async (file: File) => {
    const content = await file.text()
