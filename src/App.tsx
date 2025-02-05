@@ -2,7 +2,7 @@ import { checkCompleted, useTasks } from './hooks/useTasks'
 import { Separator } from './components/ui/separator'
 import TaskCard from './components/taskCard'
 import { Header } from './components/header'
-import { InputFooter } from './components/taskInput'
+import { TaskInput } from './components/taskInput'
 
 function App() {
   const { currentDayTasks, addTask, completeTask, uncompleteTask, progress } = useTasks()
@@ -20,7 +20,7 @@ function App() {
         ))}
       </section>
       <Separator />
-      <InputFooter onAdd={(value) => addTask({ title: value })} />
+      <TaskInput onCreateTask={addTask} />
     </main>
   )
 }
