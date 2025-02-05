@@ -2,16 +2,13 @@
 
 This is a simple tasks app built with react, shadcn and a few more libs
 
-### 01-02-2025
-- Sorted the task so that the undone appears on top
-- Changed style of completed tasks
-- Updated TS ES version
-- Refactor some components
-- Added icon
-- Fixed title counting bug
+### 04-02-2025
+- Created a complete create task component
 
 ### Todo
-- Add tag and routine input
+- [X] add tag input
+- [X] add routine input
+- Use cmdk for taskInput
 - Add animations?
 - Sync tasks
 - Create a settings button
