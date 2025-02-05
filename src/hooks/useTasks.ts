@@ -1,90 +1,33 @@
-import { unique } from "radash"
-import { useLocalStorage } from "./useLocalStorage"
 import { useEffect } from "react"
-import { isSameDay } from 'date-fns'
-import type { CreateTask, Task } from "../types/task"
-
-export const checkCompleted = (completedAt: Date | null) => {
-   if (!completedAt) return false
-   return isSameDay(new Date(), completedAt)
-}
+import { useTaskStore } from "../stores/taskStore"
 
 export function useTasks() {
-   const [tasks, setTasks] = useLocalStorage<Task[]>({ key: "tasks", initialValue: [] })
-   const currentDate = new Date()
-   const currentDayTasks = tasks.filter(task =>
+   const tasks = useTaskStore(state => state.tasks)
+   const setTasks = useTaskStore(state => state.setTasks)
+   const toggle = useTaskStore(state => state.toggleTask)
+   const addTask = useTaskStore(state => state.addTask)
+   const currentTasks = tasks.filter(task =>
+      task.routine.length === 0 ||
       task.routine.every(day => !day) ||
-      task.routine[currentDate.getDay()]
+      task.routine[new Date().getDay()]
    )
-   const completedTasks = currentDayTasks.filter(task => checkCompleted(task.completedAt))
+   // Pull
    useEffect(() => {
-      window.document.title = currentDayTasks.length ? `Tasks (${completedTasks.length}/${currentDayTasks.length})` : "Tasks"
-   }, [currentDayTasks, completedTasks])
-   const addTask = (task: CreateTask) => {
-      setTasks(prev => [...prev, {
-         id: window.crypto.randomUUID(),
-         ...task,
-         tags: task.tags ?? [],
-         routine: task.routine ?? [],
-         completedAt: null,
-      }])
-   }
-
-   const removeTask = (id: string) => {
-      setTasks(prev => prev.filter(task => task.id !== id))
-   }
-
-   const completeTask = (id: string) => {
-      const task = tasks.find(task => task.id === id)
-      if (!task) return
-      if (task.routine.every(day => !day)) {
-         removeTask(id)
-         return
+      const tasksJSON = window.localStorage.getItem('tasks')
+      if (!tasksJSON) return;
+      const storedTasks = JSON.parse(tasksJSON)
+      setTasks(storedTasks)
+   }, [setTasks])
+   // Push
+   useEffect(() => {
+      if (tasks.length) {
+         window.localStorage.setItem('tasks', JSON.stringify(tasks))
       }
-      setTasks(prev => prev.map(task => {
-         if (task.id === id) {
-            return {
-               ...task,
-               completedAt: new Date()
-            }
-         }
-         return task
-      }))
-   }
-
-   const uncompleteTask = (id: string) => {
-      setTasks(prev => prev.map(task => {
-         if (task.id === id) {
-            return {
-               ...task,
-               completedAt: null
-            }
-         }
-         return task
-      }))
-   }
-
-   const updateTask = (id: string, task: Partial<Task>) => {
-      setTasks(prev => prev.map(t => {
-         if (t.id === id) {
-            return {
-               ...t,
-               ...task
-            }
-         }
-         return t
-      }))
-   }
-
+   }, [tasks])
    return {
-      allTasks: tasks,
-      currentDayTasks,
-      tags: unique(tasks.flatMap(task => task.tags)),
-      progress: tasks.length ? completedTasks.length / currentDayTasks.length : 0,
+      tasks,
+      currentTasks,
       addTask,
-      updateTask,
-      completeTask,
-      uncompleteTask,
-      removeTask
+      toggle
    }
 }

@@ -3,8 +3,7 @@ import { cn } from "../lib/utils";
 import { Card, CardContent } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
 import { Badge } from "./ui/badge";
-import { checkCompleted } from "../hooks/useTasks";
-import type { Task } from "../types/task";
+import { checkCompleted, type Task } from "../lib/task";
 
 type Props = {
    className?: string
