@@ -1,14 +1,15 @@
 import { compare } from "./arrayUtils";
 import { days } from "./days";
 
-export type Routine = [boolean, boolean, boolean, boolean, boolean, boolean, boolean]
+export type Routine = [boolean, boolean, boolean, boolean, boolean, boolean, boolean] | []
 
-export const weekdays = [false, true, true, true, true, true, false] as Routine
-export const weekends = [true, false, false, false, false, false, true] as Routine
-export const daily = [true, true, true, true, true, true, true] as Routine
-export const empty = [false, false, false, false, false, false, false] as Routine
+export const weekdays: Routine = [false, true, true, true, true, true, false]
+export const weekends: Routine = [true, false, false, false, false, false, true]
+export const daily: Routine = [true, true, true, true, true, true, true]
+export const empty: Routine = []
 
 export function formatRoutine(routine: Routine): string | undefined {
+   if (!routine.length) return;
    if (routine.every(day => day)) return "Daily";
    if (routine.every(day => !day)) return;
    if (compare(routine, weekends)) return "Weekends";

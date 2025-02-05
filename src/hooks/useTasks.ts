@@ -13,8 +13,8 @@ export function useTasks() {
    const [tasks, setTasks] = useLocalStorage<Task[]>({ key: "tasks", initialValue: [] })
    const currentDate = new Date()
    const currentDayTasks = tasks.filter(task =>
-      task.days.every(day => !day) ||
-      task.days[currentDate.getDay()]
+      task.routine.every(day => !day) ||
+      task.routine[currentDate.getDay()]
    )
    const completedTasks = currentDayTasks.filter(task => checkCompleted(task.completedAt))
    useEffect(() => {
@@ -25,7 +25,7 @@ export function useTasks() {
          id: window.crypto.randomUUID(),
          ...task,
          tags: task.tags ?? [],
-         days: task.days ?? [false, false, false, false, false, false, false],
+         routine: task.routine ?? [],
          completedAt: null,
       }])
    }
@@ -37,7 +37,7 @@ export function useTasks() {
    const completeTask = (id: string) => {
       const task = tasks.find(task => task.id === id)
       if (!task) return
-      if (task.days.every(day => !day)) {
+      if (task.routine.every(day => !day)) {
          removeTask(id)
          return
       }

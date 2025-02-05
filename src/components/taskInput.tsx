@@ -13,11 +13,11 @@ type Props = {
 type Inputs = {
    title: string;
    description: string;
-   days: Routine;
+   routine: Routine;
    tags: string[];
 }
 
-const initialTask = { title: "", description: "", days: empty, tags: [] }
+const initialTask = { title: "", description: "", routine: empty, tags: [] }
 
 export function TaskInput({ onCreateTask, disabled = false }: Props) {
    const [task, setTask] = useState<Inputs>(initialTask)
@@ -56,8 +56,8 @@ export function TaskInput({ onCreateTask, disabled = false }: Props) {
          <Separator />
          <div className="flex gap-2 p-2 w-full">
             <RoutineSelector
-               routine={task.days}
-               onRoutineChange={(routine) => setTask(prev => ({ ...prev, days: routine }))}
+               routine={task.routine}
+               onRoutineChange={(routine) => setTask(prev => ({ ...prev, routine }))}
             />
             <TagsSelector tags={task.tags} onTagsChange={(tags) => {
                setTask(prev => ({ ...prev, tags }))

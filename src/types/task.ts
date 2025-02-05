@@ -5,7 +5,7 @@ export type Task = {
    title: string
    description?: string
    tags: string[]
-   days: Routine
+   routine: Routine
    completedAt: Date | null,
 }
 
@@ -13,5 +13,5 @@ export type CreateTask = {
    title: string
    description?: string
    tags?: string[]
-   days?: Routine
+   routine?: Routine
 }
