@@ -3,7 +3,8 @@ import { cn } from "../lib/utils";
 import { Card, CardContent } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
 import { Badge } from "./ui/badge";
-import { checkCompleted, type Task } from "../hooks/useTasks";
+import { checkCompleted } from "../hooks/useTasks";
+import type { Task } from "../types/task";
 
 type Props = {
    className?: string
@@ -13,7 +14,10 @@ type Props = {
 export default function TaskCard({ className, title, description, tags, completedAt, onToggle }: Props) {
    const isCompleted = checkCompleted(completedAt)
    return (
-      <Card className={isCompleted ? cn("px-4 py-2 w-full", className) : cn("p-4 w-full", className)}>
+      <Card className={cn("w-full", {
+         "px-4 py-2": isCompleted,
+         "p-4": !isCompleted
+      }, className)}>
          <CardContent className="flex justify-between items-center p-0">
             <div>
                <h3 className={isCompleted ? "font-semibold text-lg text-muted-foreground" : "font-semibold text-lg"}>{capitalize(title)}</h3>
