@@ -24,7 +24,6 @@ export function TaskInput({ onCreateTask, disabled = false }: Props) {
    const reset = () => setTask(initialTask)
    const handleCreateTask = () => {
       onCreateTask(task)
-      console.log(task)
       reset()
    }
    return (
