@@ -34,7 +34,7 @@ export function TagsSelector({
          className="relative flex items-center gap-1 border-input bg-background px-2 border rounded-md font-medium text-xs">
          {tags.map(tag => <Badge
             className="flex items-center gap-1"
-            variant="outline"
+            variant="secondary"
             key={tag}>{tag}
             <X size={12} className="text-muted-foreground hover:text-foreground transition cursor-pointer" onClick={() => handleRemoveTag(tag)} />
          </Badge>
