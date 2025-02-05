@@ -2,24 +2,7 @@ import { unique } from "radash"
 import { useLocalStorage } from "./useLocalStorage"
 import { useEffect } from "react"
 import { isSameDay } from 'date-fns'
-
-type Days = [boolean, boolean, boolean, boolean, boolean, boolean, boolean]
-
-export type Task = {
-   id: string
-   title: string
-   description?: string
-   tags: string[]
-   days: Days
-   completedAt: Date | null,
-}
-
-type CreateTask = {
-   title: string
-   description?: string
-   tags?: string[]
-   days?: Days
-}
+import type { CreateTask, Task } from "../types/task"
 
 export const checkCompleted = (completedAt: Date | null) => {
    if (!completedAt) return false
