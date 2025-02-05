@@ -23,8 +23,7 @@ export function RoutineSelector({ routine, onRoutineChange }: Props) {
       setOpen(false)
    }
    return (
-      <Popover open={open}
-      >
+      <Popover open={open}>
          <PopoverTrigger asChild>
             <Button
                size="sm"
