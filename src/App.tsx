@@ -5,7 +5,7 @@ import { TaskPallete } from './components/taskPalette'
 import { useTasks } from './hooks/useTasks'
 
 function App() {
-  const { currentTasks, toggle } = useTasks()
+  const { currentTasks, toggleTask, removeTask } = useTasks()
   return (
     <main className="flex flex-col min-h-screen">
       <TaskPallete />
@@ -16,7 +16,8 @@ function App() {
           <TaskCard
             key={task.id}
             {...task}
-            onToggle={() => toggle(task.id)}
+            onToggle={() => toggleTask(task.id)}
+            onRemove={() => removeTask(task.id)}
           />
         ))}
       </section>

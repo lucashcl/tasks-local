@@ -4,8 +4,9 @@ import { useTaskStore } from "../stores/taskStore"
 export function useTasks() {
    const tasks = useTaskStore(state => state.tasks)
    const setTasks = useTaskStore(state => state.setTasks)
-   const toggle = useTaskStore(state => state.toggleTask)
+   const toggleTask = useTaskStore(state => state.toggleTask)
    const addTask = useTaskStore(state => state.addTask)
+   const removeTask = useTaskStore(state => state.removeTask)
    const currentTasks = tasks.filter(task =>
       task.routine.length === 0 ||
       task.routine.every(day => !day) ||
@@ -28,6 +29,7 @@ export function useTasks() {
       tasks,
       currentTasks,
       addTask,
-      toggle
+      toggleTask,
+      removeTask
    }
 }

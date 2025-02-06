@@ -5,7 +5,8 @@ type TaskStore = {
    tasks: Task[],
    setTasks: (tasks: Task[]) => void,
    addTask: (task: CreateTask) => void,
-   toggleTask: (id: string) => void
+   toggleTask: (id: string) => void,
+   removeTask: (id: string) => void,
 }
 
 export const useTaskStore = create<TaskStore>()((set, get) => ({
@@ -38,4 +39,7 @@ export const useTaskStore = create<TaskStore>()((set, get) => ({
          return task
       })
    }),
+   removeTask: (id: string) => set({
+      tasks: get().tasks.filter(task => task.id !== id)
+   })
 }))
