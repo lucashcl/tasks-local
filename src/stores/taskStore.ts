@@ -23,20 +23,18 @@ export const useTaskStore = create<TaskStore>()((set, get) => ({
    }),
    toggleTask: (id: string) => set({
       tasks: get().tasks.map(task => {
-         if (task.id === id) {
-            const completed = checkCompleted(task.completedAt)
-            if (completed) {
-               return {
-                  ...task,
-                  completedAt: null
-               }
-            }
+         if (task.id !== id) return task
+         const completed = checkCompleted(task.completedAt)
+         if (!completed) {
             return {
                ...task,
                completedAt: new Date()
             }
          }
-         return task
+         return {
+            ...task,
+            completedAt: null
+         }
       })
    }),
    removeTask: (id: string) => set({
