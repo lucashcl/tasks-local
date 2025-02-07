@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { useTaskStore } from "../stores/taskStore"
+import { checkCompleted } from "../lib/task"
 
 export function useTasks() {
    const tasks = useTaskStore(state => state.tasks)
@@ -12,6 +13,7 @@ export function useTasks() {
       task.routine.every(day => !day) ||
       task.routine[new Date().getDay()]
    )
+   const progress = currentTasks.filter(task => checkCompleted(task.completedAt)).length / currentTasks.length
    // Pull
    useEffect(() => {
       const tasksJSON = window.localStorage.getItem('tasks')
@@ -28,6 +30,7 @@ export function useTasks() {
    return {
       tasks,
       currentTasks,
+      progress,
       addTask,
       toggleTask,
       removeTask
