@@ -1,4 +1,4 @@
-import { Download, Upload } from "lucide-react";
+import { Download, SettingsIcon, Upload } from "lucide-react";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
 import { UploadFileButton } from "./uploadFileButton";
@@ -6,6 +6,8 @@ import { handleUpload } from "../lib/upload";
 import { download } from "../lib/download";
 import { getCurrentDayName } from "../lib/days";
 import { capitalize } from "radash";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Label } from "./ui/label";
 
 export function Header({ progress }: { progress: number }) {
    return (
@@ -14,16 +16,34 @@ export function Header({ progress }: { progress: number }) {
             <h2 className="font-semibold text-2xl">{capitalize(getCurrentDayName())}</h2>
             <Progress value={progress * 100} />
          </div>
-         <div className="space-x-2">
-            <Button onClick={() => {
-               const blob = new Blob([window.localStorage.getItem('tasks') || ''], { type: 'application/json' })
-               download(blob)
-            }} variant="secondary" size="icon">
-               <Download />
-            </Button>
-            <UploadFileButton variant="secondary" size="icon" onFile={handleUpload} accept=".json">
-               <Upload />
-            </UploadFileButton>
+         <div>
+            <Dialog>
+               <DialogTrigger asChild>
+                  <Button size="icon" variant="secondary">
+                     <SettingsIcon />
+                  </Button>
+               </DialogTrigger>
+               <DialogContent>
+                  <DialogTitle>
+                     Settings
+                  </DialogTitle>
+                  <div className="flex flex-col gap-2">
+                     <Label>Export data</Label>
+                     <Button onClick={() => {
+                        const blob = new Blob([window.localStorage.getItem('tasks') || ''], { type: 'application/json' })
+                        download(blob)
+                     }} variant="secondary" >
+                        Download data
+                        <Download />
+                     </Button>
+                     <Label>Import data</Label>
+                     <UploadFileButton variant="secondary" onFile={handleUpload} accept=".json">
+                        Upload data
+                        <Upload />
+                     </UploadFileButton>
+                  </div>
+               </DialogContent>
+            </Dialog>
          </div>
       </header>
    )
