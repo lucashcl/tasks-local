@@ -10,11 +10,10 @@ import { SendHorizonal } from 'lucide-react'
 function App() {
   const { currentTasks, progress, toggleTask, removeTask } = useTasks()
   return (
-    <main className="flex flex-col min-h-screen">
+    <main className="flex flex-col min-h-screen relative">
       <TaskPallete />
       <Header progress={progress} />
-      <Separator />
-      <section className='flex flex-col flex-1 gap-4 p-4 h-full'>
+      <section className='flex flex-col flex-1 gap-4 p-4 h-full mx-80'>
         {currentTasks.map(task => (
           <TaskCard
             key={task.id}
