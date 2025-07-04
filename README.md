@@ -6,8 +6,7 @@ This is a simple tasks app built with react, shadcn and a few more libs
 - Created a complete create task component
 
 ### Todo
-[X] Update dependencies\
-[ ] Sort tasks\
+[X] Sort tasks\
 [ ] Add horizontal padding\
 [ ] Show helper when there's no tasks added yet\
 [ ] Show routine of task\
